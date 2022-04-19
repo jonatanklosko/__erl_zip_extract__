@@ -1,0 +1,36 @@
+name: Test
+on:
+  push:
+    branches:
+      - main
+jobs:
+  linux:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Erlang
+        uses: erlef/setup-beam@v1
+        with:
+          version-type: strict
+          otp-version: '25.0-rc3'
+      - run: escript test.erl
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Erlang
+        uses: erlef/setup-beam@v1
+        with:
+          version-type: strict
+          otp-version: '25.0-rc3'
+      - run: escript test.erl
+        continue-on-error: true
+      - run: |
+          if [[ -f erl_crash.dump ]]; then gzip erl_crash.dump; fi;
+        shell: bash
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Push log
+          file_pattern: erl_crash.dump.gz
+          branch: log
+          create_branch: true
