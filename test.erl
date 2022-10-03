@@ -10,7 +10,7 @@ main(_Argv) ->
   file:make_dir("tmp"),
 
   io:format("Downloading the archive~n"),
-  Url = "https://download.imagemagick.org/ImageMagick/download/binaries/ImageMagick-7.1.0-portable-Q16-x64.zip",
+  Url = "https://imagemagick.org/archive/binaries/ImageMagick-7.1.0-portable-Q16-x64.zip",
   {ok, {{_, 200, _}, _, Body}} = httpc:request(get, {Url, []}, [], []),
 
   io:format("Unzipping~n"),
